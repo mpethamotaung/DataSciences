@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class WorkflowSystemConfig(AppConfig):
+class WorkflowConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'workflow_system'
+    name = 'workflow'
