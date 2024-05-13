@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Workflow(models.Model)
+class Workflow(models.Model):
     name = models.CharField(max_lenghth=100)
 
 class Step(models.Model):
