@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workflow List</title>
+</head>
+<body>
+    <h1>Workflow List</h1>
+    <ul>
+        {% for workflow in workflows %}
+        <li>{{ workflow.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
