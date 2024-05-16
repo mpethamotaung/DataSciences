@@ -11,8 +11,6 @@ import calendar
 def index(request):
     return render(request, 'index.html')
 
-def display_customer_info(request):
-    return 
 
 def submit(request):
     if request.method == 'POST':
