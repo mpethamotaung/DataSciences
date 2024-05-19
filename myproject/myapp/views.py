@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Customer
+
 
 import pandas as pd
 import plotly.graph_objs as go
