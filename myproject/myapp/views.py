@@ -40,10 +40,7 @@ def submit(request):
                 data = [trace1, trace2]
 
                 # Layout
-                customer = Customer()
-                customer= str(customer)
-                
-                layout = go.Layout(title=f'Monthly Income & Expenses for {customer}' , xaxis=dict(title='Month'), yaxis=dict(title='Amount'))
+                layout = go.Layout(title=f'Monthly Income & Expenses' , xaxis=dict(title='Month'), yaxis=dict(title='Amount'))
 
                 # Create Plotly figure
                 fig = go.Figure(data=data, layout=layout)
