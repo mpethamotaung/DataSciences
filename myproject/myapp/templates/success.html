@@ -6,10 +6,19 @@
 </head>
 <body>
     <h1>Success</h1>
+
+    <!-- Display customer information -->
+    {% if customer %}
+    <h2>Customer Information</h2>
+    <p>Name: {{ customer.first_name }} {{ customer.last_name }}</p>
+    <p>Date of Birth: {{ customer.dob }}</p>
+    {% endif %}
+
+    <!-- Display plot -->
     {% if plot_div %}
         {{ plot_div|safe }}
     {% else %}
-        <p>Customer information has been saved successfully.</p>
+        <p>No data available for plotting.</p>
     {% endif %}
 </body>
 </html>
