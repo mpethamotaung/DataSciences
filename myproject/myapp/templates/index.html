@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Information</title>
 </head>
 <body>
 
     <h1>Customer Information</h1>
 
-    <!-- create form -->
+    <!-- Display form -->
     <form action="/submit" method="post" enctype="multipart/form-data">
-        
         {% csrf_token %}
-        <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" required><br><br>
-        
-        <input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" required><br><br>
-        
-        <input type="date" id="dob" name="dob" required><br><br>
-
-        <label for="excelFile">Upload Excel File:</label>
-        <input type="file" id="excelFile" name="excelFile" accept=".xls,.xlsx"><br><br>
-        
+        {{ form.as_p }}
+        <div>
+            <label for="excelFile">Upload Excel File:</label>
+            <input type="file" id="excelFile" name="excelFile" accept=".xls,.xlsx">
+        </div>
         <button type="submit">Submit</button>
-    
-        </form>
+    </form>
 
-   
 </body>
 </html>
