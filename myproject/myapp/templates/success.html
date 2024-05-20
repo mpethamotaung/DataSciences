@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Success</title>
+    <!-- Plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <h1>Success</h1>
-    {% if customer %}
-    <h2>Customer Information</h2>
-    <p>Name: {{ customer.first_name }} {{ customer.last_name }}</p>
-    <p>Date of Birth: {{ customer.dob }}</p>
-    {% endif %}
-    {% if plot_div %}
+    <br>
+    <h1>Customer Information</h1>
+    <div>
+        <!-- Plotly graph -->
         {{ plot_div|safe }}
-    {% else %}
-        <p>No data available for plotting.</p>
-    {% endif %}
+    </div>
+    <button onclick="location.href='/'">Back</button>
 </body>
 </html>
