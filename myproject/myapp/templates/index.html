@@ -5,8 +5,21 @@
     <title>Index</title>
 </head>
 <body>
-    <h1>Please upload your credentials and file</h1>
+    <h1>Upload Excel File and Fill Customer Form</h1>
     
+    <!-- Display form errors if any -->
+    {% if form.errors %}
+        <p>Error(s) occurred:</p>
+        <ul>
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Display the form -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
