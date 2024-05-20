@@ -133,7 +133,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/path/to/your/log/file.log',  # Specify the path to your log file
+            'filename': '/myproject',  # Specify the path to your log file
         },
     },
     'loggers': {
