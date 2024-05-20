@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from .forms import CustomerForm
+
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
+
 import calendar
-from .forms import CustomerForm
+
 
 def index(request):
     form = CustomerForm()
