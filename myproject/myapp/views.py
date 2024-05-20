@@ -10,7 +10,7 @@ def index(request):
     return render(request, 'index.html', {'form': form})
 
 def submit(request):
-    plot_div = None
+    plot_div = None #Initialize plot_div variable 
     customer_info = None  # Initialize customer_info variable
     if request.method == 'POST':
         form = CustomerForm(request.POST, request.FILES)
