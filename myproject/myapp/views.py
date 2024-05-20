@@ -3,65 +3,55 @@ from django.shortcuts import render, redirect
 from .forms import CustomerForm
 from .models import Customer
 
+
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
 
 import calendar
 
+
 def index(request):
-    form = CustomerForm()
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'index.html')
+
 
 def submit(request):
     if request.method == 'POST':
-        print("Submit view called with POST request")
-        
-        # Handle CustomerForm submission
-        customer_form = CustomerForm(request.POST)
-        if customer_form.is_valid():
-            print("Form is valid")
 
-            customer_form.save()  # Save the form data to the database
+        # Extract uploaded Excel file
+        excel_file = request.FILES.get('excelFile')
 
-            # Handle file upload
-            excel_file = request.FILES.get('excelFile')
-            if excel_file:
-                print("Excel file uploaded")
+        if excel_file:
 
-                df = pd.read_excel(excel_file)
-                if {'Month', 'Income', 'Expenses'}.issubset(df.columns):
-                    print("Excel file columns are valid")
+            
+            # Read Excel file and process data
+            df = pd.read_excel(excel_file)
 
-                    months_order = list(calendar.month_abbr)[1:]
-                    df['Month'] = pd.Categorical(df['Month'], categories=months_order, ordered=True)
-                    df_monthly = df.groupby('Month').sum().reset_index()
+            # Process data to calculate monthly income and expenditure
+            if {'Month', 'Income', 'Expenses'}.issubset(df.columns):  # Check if required columns exist
 
-                    trace1 = go.Scatter(x=df_monthly['Month'], y=df_monthly['Income'], mode='lines', name='Income')
-                    trace2 = go.Scatter(x=df_monthly['Month'], y=df_monthly['Expenses'], mode='lines', name='Expenses')
-                    data = [trace1, trace2]
+                # Sort months in proper order
+                months_order = list(calendar.month_abbr)[1:]
+                df['Month'] = pd.Categorical(df['Month'], categories=months_order, ordered=True)
 
-                    layout = go.Layout(title=f'Monthly Income & Expenses', xaxis=dict(title='Month'), yaxis=dict(title='Amount'))
-                    fig = go.Figure(data=data, layout=layout)
-                    plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+                # Group by month and sum the income and expenses
+                df_monthly = df.groupby('Month').sum().reset_index()  # Reset index for Plotly
 
-                    # Get the latest saved customer
-                    latest_customer = Customer.objects.latest('id')
+                # Create Plotly traces
+                trace1 = go.Scatter(x=df_monthly['Month'], y=df_monthly['Income'], mode='lines', name='Income')
+                trace2 = go.Scatter(x=df_monthly['Month'], y=df_monthly['Expenses'], mode='lines', name='Expenses')
+                data = [trace1, trace2]
 
-                    return render(request, 'success.html', {'plot_div': plot_div, 'customer': latest_customer})
-                else:
-                    error_message = "One or more required columns (Month, Income, Expenses) are missing in the uploaded Excel file."
-                    return render(request, 'error.html', {'error_message': error_message})
-        else:
-            print("Form errors:", customer_form.errors)
+                # Layout
+                layout = go.Layout(title=f'Monthly Income & Expenses' , xaxis=dict(title='Month'), yaxis=dict(title='Amount'))
 
-    # If the request method is not POST, redirect to the index page
-    return redirect('index')
+                # Create Plotly figure
+                fig = go.Figure(data=data, layout=layout)
 
-def success(request):
-    if 'customer' in request.session:  # Check if customer information is available in session
-        customer = request.session.pop('customer')  # Get customer information from session
-    else:
-        customer = None
-
-    return render(request, 'success.html', {'customer': customer})
+                # Convert Plotly figure to HTML
+                plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+                return render(request, 'success.html', {'plot_div': plot_div})
+            else:
+                error_message = "One or more required columns (Month, Income, Expenses) are missing in the uploaded Excel file."
+                return render(request, 'error.html', {'error_message': error_message})
+    return render(request, 'index.html')
