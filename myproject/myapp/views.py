@@ -1,5 +1,6 @@
-from django.shortcuts import render
-
+# views.py
+from django.shortcuts import render, redirect
+from .forms import CustomerForm  # Import the CustomerForm
 
 import pandas as pd
 import plotly.graph_objs as go
@@ -7,20 +8,26 @@ from plotly.offline import plot
 
 import calendar
 
-
 def index(request):
-    return render(request, 'index.html')
-
+    # Create an instance of the form
+    form = CustomerForm()
+    
+    # Render the form in the template
+    return render(request, 'index.html', {'form': form})
 
 def submit(request):
     if request.method == 'POST':
+        
+        # Handle CustomerForm submission
+        customer_form = CustomerForm(request.POST)
+        if customer_form.is_valid():
+            customer_form.save()  # Save the form data to the database
+            return redirect('success')  # Redirect to a success page or another view
 
         # Extract uploaded Excel file
         excel_file = request.FILES.get('excelFile')
 
         if excel_file:
-
-            
             # Read Excel file and process data
             df = pd.read_excel(excel_file)
 
@@ -40,7 +47,7 @@ def submit(request):
                 data = [trace1, trace2]
 
                 # Layout
-                layout = go.Layout(title=f'Monthly Income & Expenses' , xaxis=dict(title='Month'), yaxis=dict(title='Amount'))
+                layout = go.Layout(title=f'Monthly Income & Expenses', xaxis=dict(title='Month'), yaxis=dict(title='Amount'))
 
                 # Create Plotly figure
                 fig = go.Figure(data=data, layout=layout)
@@ -51,5 +58,10 @@ def submit(request):
             else:
                 error_message = "One or more required columns (Month, Income, Expenses) are missing in the uploaded Excel file."
                 return render(request, 'error.html', {'error_message': error_message})
-    return render(request, 'index.html')
 
+    # If the request method is not POST, or form submission is not valid, re-render the index page
+    form = CustomerForm()
+    return render(request, 'index.html', {'form': form})
+
+def success(request):
+    return render(request, 'success.html')
