@@ -8,12 +8,20 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
+
     <br>
     <h1>Customer Information</h1>
     <div>
-        <!-- Plotly graph -->
+        <!-- Display customer information -->
+        <p>First Name: {{ customer_info.first_name }}</p>
+        <p>Last Name: {{ customer_info.last_name }}</p>
+        <p>Date of Birth: {{ customer_info.dob }}</p>
+    </div>
+    <div>
+        <!-- Display Plotly graph -->
         {{ plot_div|safe }}
     </div>
     <button onclick="location.href='/'">Back</button>
+
 </body>
 </html>
