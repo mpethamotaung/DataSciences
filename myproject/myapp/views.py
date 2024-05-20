@@ -15,16 +15,24 @@ def index(request):
 
 def submit(request):
     if request.method == 'POST':
+        print("Submit view called with POST request")
+        
         # Handle CustomerForm submission
         customer_form = CustomerForm(request.POST)
         if customer_form.is_valid():
+            print("Form is valid")
+
             customer_form.save()  # Save the form data to the database
 
             # Handle file upload
             excel_file = request.FILES.get('excelFile')
             if excel_file:
+                print("Excel file uploaded")
+
                 df = pd.read_excel(excel_file)
                 if {'Month', 'Income', 'Expenses'}.issubset(df.columns):
+                    print("Excel file columns are valid")
+
                     months_order = list(calendar.month_abbr)[1:]
                     df['Month'] = pd.Categorical(df['Month'], categories=months_order, ordered=True)
                     df_monthly = df.groupby('Month').sum().reset_index()
@@ -44,10 +52,8 @@ def submit(request):
                 else:
                     error_message = "One or more required columns (Month, Income, Expenses) are missing in the uploaded Excel file."
                     return render(request, 'error.html', {'error_message': error_message})
-
-        # If form submission or file upload fails, re-render the index page with form errors
-        form = CustomerForm(request.POST)
-        return render(request, 'index.html', {'form': form})
+        else:
+            print("Form errors:", customer_form.errors)
 
     # If the request method is not POST, redirect to the index page
     return redirect('index')
